@@ -1,0 +1,1 @@
+<h1> template-vue sample game </h1> 
