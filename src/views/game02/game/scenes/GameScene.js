@@ -98,14 +98,20 @@ export class GameScene extends Scene {
     startGame() {
 
         this.add.image(this.playGround.x, this.playGround.y, "sky");
-
+        //  The platforms group contains the ground and the 2 ledges we can jump on
         this.platforms = this.physics.add.staticGroup();
+
+        //  Here we create the ground.
+        //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
         this.platforms.create(400, 568, "ground").setScale(2).refreshBody();
+
+        //  Now let's create some ledges
         this.platforms.create(600, 400, "ground");
         this.platforms.create(50, 250, "ground");
         this.platforms.create(750, 220, "ground");
 
-        this.player = this.physics.add.sprite(100, 500, "dude").setName("player");
+        // The player and its settings
+        this.player = this.physics.add.sprite(100, 400, "dude").setName("player");
 
         // player가 바닥에 닿았을 때, 약간 튕기는 느낌을 설정
         this.player.setBounce(0.2); // y값을 생략하면 x와 y모두 동일한 값을 적용하는 것과 같음
@@ -273,7 +279,7 @@ export class GameScene extends Scene {
             this.player.setVelocityX(160);
             this.player.anims.play("right", true);
         } else {
-            this.player.setVelocity(0);
+            this.player.setVelocityX(0);
             this.player.anims.play("turn");
         }
 

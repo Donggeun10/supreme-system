@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-25 mx-auto">
     <a href="https://vite.dev" target="_blank">
       <img src="./assets/vite.svg" class="logo" alt="" />
     </a>

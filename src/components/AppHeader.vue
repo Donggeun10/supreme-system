@@ -1,26 +1,49 @@
 <template>
-    <nav class="py-2 bg-body-tertiary border-bottom">
-        <div class="container d-flex flex-wrap">
-            <ul class="nav me-auto">
-                <li class="nav-item"><a href="/" class="nav-link link-body-emphasis px-2 active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="/play" class="nav-link link-body-emphasis px-2">Game01</a></li>
-                <li class="nav-item"><a href="/play2" class="nav-link link-body-emphasis px-2">your-first-phaser-3-game</a></li>
-                <li class="nav-item"><a href="/play3" class="nav-link link-body-emphasis px-2">Game03</a></li>
-                <li class="nav-item"><a href="/" class="nav-link link-body-emphasis px-2">About</a></li>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Eleventh navbar example">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Navbar</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            </ul>
-            <ul class="nav">
-                <li class="nav-item"><a href="javascript:alert('it is not yet provided')" class="nav-link link-body-emphasis px-2">Login</a></li>
-                <li class="nav-item"><a href="javascript:alert('it is not yet provided')" class="nav-link link-body-emphasis px-2">Sign up</a></li>
-            </ul>
-        </div>
-    </nav>
+                <div class="collapse navbar-collapse" id="navbarsExample09">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/play">Game01</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/play2">your-first-phaser-3-game</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/play3">Game03</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a href="javascript:alert('it is not yet provided')" class="nav-link">Login</a></li>
+                        <li class="nav-item"><a href="javascript:alert('it is not yet provided')" class="nav-link">Sign up</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
     <header class="py-3 mb-4 border-bottom">
         <div class="container d-flex flex-wrap justify-content-center">
-            <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
-                <svg class="bi me-2 m-1" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-                <span class="fs-4 m-1">Vue 3 + Vite + JavaScript + Phaser</span>
-            </a>
             <button type="button" class="btn btn-primary mb-3 mb-lg-0 m-1" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample">Toggle
                 offcanvas</button>
             <form class="col-3 col-lg-auto mb-3 mb-lg-0 m-1" role="search">
