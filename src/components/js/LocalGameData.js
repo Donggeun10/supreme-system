@@ -2,7 +2,14 @@
 
 export function saveGameData(gameName, data) {
     console.log('saveGameData', gameName, data);
-    localStorage.setItem(gameName, JSON.stringify(data)); // 데이터 저장
+    let datas = loadGameData(gameName);
+    if (datas) {
+        datas.push(data);
+    }else{
+        datas = [];
+        datas.push(data);
+    }
+    localStorage.setItem(gameName, JSON.stringify(datas)); // 데이터 저장
 }
 
 export function loadGameData(gameName) {

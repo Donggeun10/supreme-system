@@ -61,31 +61,30 @@ const currentScene = (scene) => {
 </script>
 
 <template>
-    <div class="app_display">
-        <PhaserGame ref="phaserRef" @current-active-scene="currentScene" />
-        <div>
-            <div>
-                <button class="button" @click="changeScene">Change Scene</button>
+    <div class="container">
+        <div class="row">
+            <!-- 왼쪽 열 -->
+            <div class="col-12 col-md-8 order-md-1">
+                <PhaserGame ref="phaserRef" @current-active-scene="currentScene" />
             </div>
-            <div>
-                <button :disabled="canMoveSprite" class="button" @click="moveSprite">
-                    Toggle Movement
-                </button>
-            </div>
-            <div class="spritePosition">
-                Sprite Position:
-                <pre>{{ spritePosition }}</pre>
-            </div>
-            <div>
-                <button class="button" @click="addSprite">Add New Sprite</button>
+            <!-- 오른쪽 열 -->
+            <div class="col-12 col-md-4 order-md-2">
+                <div>
+                    <button class="button" @click="changeScene">Change Scene</button>
+                </div>
+                <div>
+                    <button :disabled="canMoveSprite" class="button" @click="moveSprite">
+                        Toggle Movement
+                    </button>
+                </div>
+                <div class="spritePosition">
+                    Sprite Position:
+                    <pre>{{ spritePosition }}</pre>
+                </div>
+                <div>
+                    <button class="button" @click="addSprite">Add New Sprite</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
-<style>
-.app_display {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

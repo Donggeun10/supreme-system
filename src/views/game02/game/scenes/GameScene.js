@@ -9,7 +9,7 @@ export class GameScene extends Scene {
         super({ key: "GameScene" }); // key는 Phaser에서 Scene을 식별하기 위한 값
     }
     gameName = "firstGame";
-    gameData = { stage: 1, score: 0, time: 60, savedTs: Date.now() };
+    gameData = { playerName : "", stage: 1, score: 0, playTime: 0, dateTime: Date.now(), timestamp: Date.now(), timeZone: "Aisa/Seoul"};
     player ;
     stars ;
     bombs ;
@@ -17,12 +17,16 @@ export class GameScene extends Scene {
     cursors ;
     gameOver = false;
     stage= 1;
-    stageText ;
+    stageText = "";
     score= 0;
-    scoreText ;
+    scoreText = "";
     timerVal = 60;
-    timerText ;
+    timerText = "";
+    playTime = 0;
+    tmpPlayTime = 0;
+    playTimeText = "";
     playGround = { x: 400, y: 300 };
+    playerName = "";
     welcomeMessage = "";
 
     // 게임 시작시에 필요한 GameObject를 정의
@@ -71,26 +75,11 @@ export class GameScene extends Scene {
                            })
         });
 
-        // const nameInput = this.add.dom(this.playGround.x, this.playGround.y-200).createFromCache("playerName");
-
         this.welcomeMessage = this.add.text(this.playGround.x, this.playGround.y-200, "Hello, --", {
             color: "#FFFFFF",
             fontSize: 60,
             fontStyle: "bold"
         }).setOrigin(0.5);
-
-        this.returnKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-
-        this.returnKey.on("down", event => {
-            console.log(nameInput);
-            let name = nameInput.getChildByName("playerName");
-            console.log(name);
-            if(name?.value) {
-                this.welcomeMessage.setText("Hello, " + name.value);
-                name.value = "";
-            }
-            nameInput.visible = false;
-        });
 
         EventBus.emit('current-scene-ready', this);
     }
@@ -185,6 +174,11 @@ export class GameScene extends Scene {
             color: "#333",
         });
 
+        this.playTimeText = this.add.text(this.playGround.x, 560, "Play Time : 00", {
+            fontSize: "32px",
+            color: "#fbfbfb",
+        });
+
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.collider(this.bombs, this.platforms);
@@ -194,10 +188,16 @@ export class GameScene extends Scene {
     }
 
     gameOverScreen() {
-        this.gameData.stage = this.stage;
-        this.gameData.score = this.score;
-        this.gameData.savedTs = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss');
-        saveGameData(this.gameName, this.gameData);
+        if(this.playerName && this.playerName !== "") {
+            this.gameData.stage = this.stage;
+            this.gameData.score = this.score;
+            this.gameData.dateTime = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss');
+            this.gameData.timeZone = DateTime.now().zoneName;
+            this.gameData.timestamp = DateTime.utc().toMillis();
+            this.gameData.playTime = this.tmpPlayTime;
+            this.gameData.playerName = this.playerName;
+            saveGameData(this.gameName, this.gameData);
+        }
         this.add.image(this.playGround.x, this.playGround.y, 'background').setAlpha(0.5);
 
         const gameOverText = this.add.text(this.playGround.x, this.playGround.y, 'Game Over', {
@@ -250,6 +250,7 @@ export class GameScene extends Scene {
             bomb.allowGravity = false;
             this.timerVal = 60;
             this.stageText.setText('STAGE : ' + ++this.stage);
+            this.playTime = this.tmpPlayTime;
             this.timer.reset({ delay: 60000, callback: this.gameOverScreen, callbackScope: this });
         }
     }
@@ -291,7 +292,8 @@ export class GameScene extends Scene {
             if (this.timer.getProgress() === 1) {
                 this.timerText.setText("Time : 00");
             } else {
-                const remaining = (this.timerVal - this.timer.getElapsedSeconds()).toPrecision(4);
+                let elapsedSeconds = Math.floor(this.timer.getElapsedSeconds());
+                const remaining = (this.timerVal - elapsedSeconds).toPrecision(4);
                 const pos = remaining.indexOf('.');
 
                 let seconds = remaining.substring(0, pos);
@@ -301,13 +303,31 @@ export class GameScene extends Scene {
 
                 this.timerText.setText(seconds + ':' + ms);
                 this.timerText.setText("Time : " + seconds);
+                this.playTimeText.setText("Play Time : " + Phaser.Utils.String.Pad(this.playTime + elapsedSeconds, 2, '0', 1));
+                this.tmpPlayTime = this.playTime + elapsedSeconds;
             }
         }
 
     }
 
     addPlayerName(name){
+        this.playerName = name;
         this.welcomeMessage.setText("Hello, " + name);
+    }
+
+    // 스코어 목록을 화면에 표시
+    displayScoreboard(gameName) {
+        let scores = JSON.parse(localStorage.getItem(gameName)) || [];
+        scores.sort((a, b) => b.score - a.score); // 점수 내림차순 정렬
+
+        let yPosition = 100;
+        scores.forEach((entry, index) => {
+            this.add.text(400, yPosition, `${index + 1}. ${entry.playerName}: ${entry.stage}: ${entry.score} : ${entry.playTime} : ${entry.timeZone}`, {
+                fontSize: '32px',
+                fill: '#fff'
+            }).setOrigin(0.5);
+            yPosition += 40;
+        });
     }
 }
 

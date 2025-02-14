@@ -1,9 +1,11 @@
 <script setup>
 import PhaserGame2 from "./game/PhaserGame2.vue";
 import {ref, toRaw} from "vue";
-import {loadGameData} from "@/components/js/LocalGameData.js";
+import {clearAllGameData, loadGameData} from "@/components/js/LocalGameData.js";
 
 const phaserRef = ref()
+let playerName = "";
+let gameName = "firstGame";
 
 // Event emitted from the PhaserGame component
 const currentScene = (scene) => {
@@ -20,27 +22,64 @@ function print(phase, data){
 
 const addPlayerName = () => {
     const scene = toRaw(phaserRef.value.scene);
-    scene.addPlayerName(document.getElementsByName('playName')[0].value);
+    scene.addPlayerName(playerName);
 }
 
-let saveData = loadGameData('firstGame');
+const displayScoreList = () => {
+    const scene = toRaw(phaserRef.value.scene);
+    scene.displayScoreboard(gameName);
+}
+
+const removeAllGameData = () => {
+    if(confirm('Do you want to remove all game data?')){
+        clearAllGameData();
+    }
+}
+
+let saveDatas = loadGameData('firstGame');
+if(saveDatas){
+    saveDatas.sort((a, b) => b.score - a.score);
+    playerName = saveDatas[0].playerName;
+
+}
 </script>
 <template>
-    <PhaserGame2 ref="phaserRef" @current-active-scene="currentScene" @game-over-scene="gameOverScene"/>
+    <div class="container">
+        <div class="row">
+            <!-- 왼쪽 열 -->
+            <div class="col-12 col-md-8 order-md-1">
+                <PhaserGame2 ref="phaserRef" @current-active-scene="currentScene" @game-over-scene="gameOverScene"/>
+            </div>
+            <!-- 오른쪽 열 -->
+            <div class="col-12 col-md-4 order-md-2">
+                <div class="input-form">
+                    <input v-model="playerName" type="text" placeholder="put in Player Name" @keyup.enter="addPlayerName" />
+                </div>
+                <div>
+                    <button class="button" @click="displayScoreList">Score List</button>
+                </div>
+                <div class="spritePosition">
+                    Game Result : <pre>{{ saveDatas }}</pre>
+                </div>
+                <div>
+                    <button class="button" @click="removeAllGameData">Clear All Game Data</button>
+                </div>
+                <div>
+                    <button class="button" @click="addSprite">Add New Sprite</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <style>
-.app_display {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 .input-form {
     padding: 15px;
+    width: 100%;
     background-color: #f67171;
 }
 #input-form input {
     padding: 10px;
     font-size: 20px;
-    width: 400px;
+    width: 100%;
 }
 </style>
