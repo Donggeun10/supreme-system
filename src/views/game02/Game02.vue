@@ -1,11 +1,12 @@
 <script setup>
 import PhaserGame2 from "./game/PhaserGame2.vue";
 import {ref, toRaw} from "vue";
-import {clearAllGameData, loadGameData} from "@/components/js/LocalGameData.js";
+import {LocalStorageRepository, RedisExternalRepository} from "@/components/js/DataStorage.js";
 
-const phaserRef = ref()
-let playerName = "";
-let gameName = "firstGame";
+const phaserRef = ref();
+const gameName = "firstGame";
+const repository = new LocalStorageRepository();
+const redisRepo = new RedisExternalRepository();
 
 // Event emitted from the PhaserGame component
 const currentScene = (scene) => {
@@ -32,16 +33,29 @@ const displayScoreList = () => {
 
 const removeAllGameData = () => {
     if(confirm('Do you want to remove all game data?')){
-        clearAllGameData();
+        repository.clearAllGameData();
     }
 }
 
-let saveDatas = loadGameData('firstGame');
-if(saveDatas){
-    saveDatas.sort((a, b) => b.score - a.score);
-    playerName = saveDatas[0].playerName;
+let playerName  = ref("");
+let saveDatas = ref("");
+
+redisRepo.loadGameData(gameName, findPlayerName);
+
+function findPlayerName(gameName, datas){
+
+    saveDatas = datas;
+
+    if(Array.isArray(saveDatas)){
+        saveDatas.sort((a, b) => b.timestamp - a.timestamp);
+        playerName.value = saveDatas[0].playerName;
+    } else if(saveDatas){
+        playerName.value = saveDatas.playerName;
+    }
+    console.log('playerName', gameName, playerName, saveDatas);
 
 }
+
 </script>
 <template>
     <div class="container">
@@ -63,9 +77,6 @@ if(saveDatas){
                 </div>
                 <div>
                     <button class="button" @click="removeAllGameData">Clear All Game Data</button>
-                </div>
-                <div>
-                    <button class="button" @click="addSprite">Add New Sprite</button>
                 </div>
             </div>
         </div>

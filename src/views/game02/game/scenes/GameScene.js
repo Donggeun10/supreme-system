@@ -1,13 +1,16 @@
 import {EventBus} from "../EventBus";
 import { Scene } from 'phaser';
-import {saveGameData} from "@/components/js/LocalGameData.js";
+import {RedisExternalRepository} from "@/components/js/DataStorage.js";
 import {DateTime} from "luxon";
 
 export class GameScene extends Scene {
 
     constructor() {
         super({ key: "GameScene" }); // key는 Phaser에서 Scene을 식별하기 위한 값
+        this.repository = new RedisExternalRepository();
     }
+
+    repository;
     gameName = "firstGame";
     gameData = { playerName : "", stage: 1, score: 0, playTime: 0, dateTime: Date.now(), timestamp: Date.now(), timeZone: "Aisa/Seoul"};
     player ;
@@ -196,7 +199,7 @@ export class GameScene extends Scene {
             this.gameData.timestamp = DateTime.utc().toMillis();
             this.gameData.playTime = this.tmpPlayTime;
             this.gameData.playerName = this.playerName;
-            saveGameData(this.gameName, this.gameData);
+            this.repository.saveGameData(this.gameName, this.gameData);
         }
         this.add.image(this.playGround.x, this.playGround.y, 'background').setAlpha(0.5);
 

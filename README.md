@@ -10,7 +10,5 @@ from https://github.com/phaserjs/template-vue
 ## 4. Docker container creation and execution command
 ```
 npm run build-nolog
-docker-compose build --no-cache
 docker build -t vue3-demo:local .  && docker run -p 9090:80 vue3-demo:local
-docker build -t redis:local -f Dockerfile_redis . && docker run -p 7379:6379 redis:local
 ```
