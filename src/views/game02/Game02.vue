@@ -2,9 +2,10 @@
 import PhaserGame2 from "./game/PhaserGame2.vue";
 import {ref, toRaw} from "vue";
 import {LocalStorageRepository, RedisExternalRepository} from "@/components/js/DataStorage.js";
+import {config} from "@/views/game02/game/main.js";
 
 const phaserRef = ref();
-const gameName = "firstGame";
+const gameId = config.gameId;
 const repository = new LocalStorageRepository();
 const redisRepo = new RedisExternalRepository();
 
@@ -17,44 +18,45 @@ const gameOverScene = (scene) => {
     print('Game Over', scene)
 }
 
-function print(phase, data){
+const print = (phase, data) => {
     console.log(phase, data)
 }
 
 const addPlayerName = () => {
     const scene = toRaw(phaserRef.value.scene);
-    scene.addPlayerName(playerName);
+    scene.addPlayerName(playerName.value);
 }
 
 const displayScoreList = () => {
     const scene = toRaw(phaserRef.value.scene);
-    scene.displayScoreboard(gameName);
+    if (scene) {
+        //  Call the changeScene method defined in the `MainMenu`, `Game` and `GameOver` Scenes
+        scene.changeScene()
+    }
 }
 
 const removeAllGameData = () => {
-    if(confirm('Do you want to remove all game data?')){
+    if (confirm('Do you want to remove all game data?')) {
         repository.clearAllGameData();
     }
 }
 
-let playerName  = ref("");
+let playerName = ref("");
 let saveDatas = ref("");
 
-redisRepo.loadGameData(gameName, findPlayerName);
-
-function findPlayerName(gameName, datas){
-
+const findPlayerName = (gameId, datas) => {
     saveDatas = datas;
 
-    if(Array.isArray(saveDatas)){
+    if (Array.isArray(saveDatas)) {
         saveDatas.sort((a, b) => b.timestamp - a.timestamp);
         playerName.value = saveDatas[0].playerName;
-    } else if(saveDatas){
+    } else if (saveDatas) {
         playerName.value = saveDatas.playerName;
     }
-    console.log('playerName', gameName, playerName, saveDatas);
-
+    console.log('playerName', gameId, playerName, saveDatas);
 }
+
+redisRepo.loadGameData(gameId, findPlayerName);
 
 </script>
 <template>
@@ -67,7 +69,7 @@ function findPlayerName(gameName, datas){
             <!-- 오른쪽 열 -->
             <div class="col-12 col-md-4 order-md-2">
                 <div class="input-form">
-                    <input v-model="playerName" type="text" placeholder="put in Player Name" @keyup.enter="addPlayerName" />
+                    <input v-model="playerName" type="text" placeholder="put in Player Name" @keyup.enter="addPlayerName"/>
                 </div>
                 <div>
                     <button class="button" @click="displayScoreList">Score List</button>

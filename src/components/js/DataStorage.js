@@ -61,6 +61,20 @@ export class RedisExternalRepository {
         });
     }
 
+    loadGameDataWithGameId(gameName) {
+        return new Promise((resolve, reject) => {
+            this.restClient.get('/score/redis/' + gameName, this.config).then(response => {
+                let data = response.data;
+                console.log('응답 데이터:', data);
+                //callback(gameName, JSON.parse(data[gameName]));
+                resolve(JSON.parse(data[gameName]))
+            }).catch(error => {
+                console.error('오류 발생:', error);
+                reject(error);
+            });
+        });
+    }
+
     saveGameData(gameName, data) {
 
         console.log('saveGameData', gameName, data);

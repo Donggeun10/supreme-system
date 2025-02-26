@@ -1,9 +1,11 @@
 import Preloader from '@/views/game02/game/scenes/Preloader.js'
 import GameScene from '@/views/game02/game/scenes/GameScene.js'
+import ScoreBoard from "@/views/game02/game/scenes/ScoreBoard.js";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
-const config = {
+export const config = {
+    gameId: "firstGame",
     type: Phaser.AUTO,
     width: 800,
     height: 600,
@@ -22,6 +24,7 @@ const config = {
     scene: [
         Preloader,
         GameScene,
+        ScoreBoard,
         // MainMenu,
         // MainGame,
     ],

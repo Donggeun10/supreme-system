@@ -318,19 +318,9 @@ export class GameScene extends Scene {
         this.welcomeMessage.setText("Hello, " + name);
     }
 
-    // 스코어 목록을 화면에 표시
-    displayScoreboard(gameName) {
-        let scores = JSON.parse(localStorage.getItem(gameName)) || [];
-        scores.sort((a, b) => b.score - a.score); // 점수 내림차순 정렬
-
-        let yPosition = 100;
-        scores.forEach((entry, index) => {
-            this.add.text(400, yPosition, `${index + 1}. ${entry.playerName}: ${entry.stage}: ${entry.score} : ${entry.playTime} : ${entry.timeZone}`, {
-                fontSize: '32px',
-                fill: '#fff'
-            }).setOrigin(0.5);
-            yPosition += 40;
-        });
+    changeScene ()
+    {
+        this.scene.start('ScoreBoard');
     }
 }
 
