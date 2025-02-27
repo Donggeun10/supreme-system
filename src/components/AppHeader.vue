@@ -22,6 +22,9 @@
                             <a class="nav-link" href="/play3">Game03</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/playFiveStones">FiveStones</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                         </li>
                         <li class="nav-item dropdown">
