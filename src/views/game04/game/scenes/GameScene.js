@@ -1,7 +1,7 @@
 import {EventBus} from "../EventBus";
 import {Scene} from 'phaser';
 import {config} from "@/views/game04/game/main.js";
-import {Ollama} from 'ollama'
+// import {Ollama} from 'ollama'
 
 export class GameScene extends Scene {
 
@@ -92,32 +92,40 @@ export class GameScene extends Scene {
         // 게임 캔버스에서 이미지 데이터 URL 생성
         const dataURL = this.game.canvas.toDataURL('image/png');
         // 다운로드 링크 생성
-        // const link = document.createElement('a');
-        // link.href = dataURL;
-        // link.download = 'game_screenshot.png';
-        //
-        // // 링크 클릭하여 다운로드 실행
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'game_screenshot.png';
+
+        // 링크 클릭하여 다운로드 실행
         // link.click();
         // console.log(dataURL);
-        const ollama = new Ollama({host: 'http://172.27.6.8:11436'})
-        const response = await ollama.chat({
-                                               model: 'MiniCPM-V-2_6',
-                                               messages: [{
-                                                   role: "system",
-                                                   content: "You are a friendly AI assistant. Your job is to judge the outcome of the game Gomok. The rule of Concave is that if five stones of the same color are placed in a row, the stone of that color wins. Continuous corresponds to horizontal, vertical and diagonal lines. The white and black stones are round and placed on top of the intersection. Please look at the image delivered and tell us the color of the winning stone. Or you can just say that if there is no winner, there is no winner."
-                                               },
-                                                   {
-                                                       role: 'user',
-                                                       content: 'Which color stone wins?',
-                                                       image: dataURL,
-                                                   }],
-                                               stream: true
-                                           })
-        let answer = "";
-        for await (const part of response) {
-            answer = answer.concat(part.message.content);
-            console.log(answer);
-        }
+        // const ollama = new Ollama({host: 'http://172.27.6.8:11435'})
+        // const model = "MiniCPM-V-2_6-Q4_K_M";
+        // const systemContent = " You are a friendly AI assistant. Your job is to judge the outcome of the game Gomok. "
+        //     + " The rule of Concave is that if five stones of the same color are placed in a row, the stone of that color wins. Continuous corresponds to horizontal, vertical and diagonal lines. "
+        //     + " The game board is a 19x19 grid. The intersection is the point where the horizontal and vertical lines intersect. "
+        //     + " The white and black stones are placed on a yellow background with 19 lines drawn horizontally and vertically."
+        //     + " The white and black stones are big round and placed on top of the intersection. "
+        //     + " Please look at the image delivered and tell us the color of the winning stone. Or you can just say that if there is no winner, there is no winner.";
+        //
+        // const response = await ollama.chat({
+        //                                        model: model,
+        //                                        messages: [{
+        //                                            role: "system",
+        //                                            content: systemContent
+        //                                        },
+        //                                            {
+        //                                                role: 'user',
+        //                                                content: 'which color stone wins?',
+        //                                                image: [ dataURL ],
+        //                                            }],
+        //                                        stream: true
+        //                                    })
+        // let answer = "";
+        // for await (const part of response) {
+        //     answer = answer.concat(part.message.content);
+        //     console.log(answer);
+        // }
     }
 
 }

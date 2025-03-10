@@ -300,7 +300,7 @@ export class GameScene extends Scene {
                 const pos = remaining.indexOf('.');
 
                 let seconds = remaining.substring(0, pos);
-                let ms = remaining.substr(pos + 1, 2);
+                let ms = remaining.substring(pos + 1, 2);
 
                 seconds = Phaser.Utils.String.Pad(seconds, 2, '0', 1);
 
